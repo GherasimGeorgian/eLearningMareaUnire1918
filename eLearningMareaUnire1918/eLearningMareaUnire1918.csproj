@@ -45,6 +45,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="eLearning1918_Elev.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="eLearning1918_Elev.Designer.cs">
+      <DependentUpon>eLearning1918_Elev.cs</DependentUpon>
+    </Compile>
     <Compile Include="eLearning1918_start.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -59,6 +65,9 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="eLearning1918_Elev.resx">
+      <DependentUpon>eLearning1918_Elev.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="eLearning1918_start.resx">
       <DependentUpon>eLearning1918_start.cs</DependentUpon>
     </EmbeddedResource>
