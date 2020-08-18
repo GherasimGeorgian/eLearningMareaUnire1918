@@ -120,7 +120,7 @@ namespace eLearningMareaUnire1918
 
             foreach (int tipitem in numbers)
             {
-                SqlDataAdapter sda3 = new SqlDataAdapter("SELECT EnuntItem,TipItem,RaspunsCorectItem,Raspuns1Item,Raspuns2Item,Raspuns3Item,Raspuns4Item FROM Itemi WHERE IdItem = '" + tipitem + "'", con);
+                SqlDataAdapter sda3 = new SqlDataAdapter("SELECT EnuntItem,TipItem,RaspunsCorectItem,Raspuns1Item,Raspuns2Item,Raspuns3Item,Raspuns4Item,IdItem FROM Itemi WHERE IdItem = '" + tipitem + "'", con);
                 sda3.Fill(dtIntrebariGenerate);
             }
             con.Close();

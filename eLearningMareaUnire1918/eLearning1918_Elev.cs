@@ -7,7 +7,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-
+using System.Data.SqlClient;
+using System.Collections;
 namespace eLearningMareaUnire1918
 {
     public partial class eLearning1918_Elev : Form
@@ -34,6 +35,11 @@ namespace eLearningMareaUnire1918
 
         RadioButton radioBoxTrue = new RadioButton();
         RadioButton radioBoxFalse = new RadioButton();
+
+        DataTable reportRaspunsuri = new DataTable();
+
+        public static string constr = @"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=|DataDirectory|\eLearning1918.mdf;Integrated Security=True;Connect Timeout=30";
+
         private void eLearning1918_Elev_Load(object sender, EventArgs e)
         {
             label1.Text = "Punctaj" + punctaj.ToString();
@@ -49,6 +55,11 @@ namespace eLearningMareaUnire1918
             checkBox4.BackColor = Color.Transparent;
             radioBoxTrue.BackColor = Color.Transparent;
             radioBoxFalse.BackColor = Color.Transparent;
+            reportRaspunsuri.Columns.Add("IdItem", typeof(int));
+            reportRaspunsuri.Columns.Add("TipItem", typeof(int));
+            reportRaspunsuri.Columns.Add("EnuntItem", typeof(string));
+            reportRaspunsuri.Columns.Add("RaspunsElev", typeof(string));
+            reportRaspunsuri.Columns.Add("RaspunsCorect", typeof(string));
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -185,11 +196,51 @@ namespace eLearningMareaUnire1918
                 this.tabPage1.Controls.Add(radioBoxFalse);
             }
         }
-
+        public void EndGame()
+        {
+            if (idintrebare == 9)
+            {
+                button1.Visible = false;
+                button2.Visible = false;
+                button3.Visible = false;
+                richTextBox1.Visible = false;
+                radioBox1.Visible = false;
+                radioBox2.Visible = false;
+                radioBox3.Visible = false;
+                radioBox4.Visible = false;
+                checkBox1.Visible = false;
+                checkBox2.Visible = false;
+                checkBox3.Visible = false;
+                checkBox4.Visible = false;
+                txtRaspuns.Visible = false;
+                radioBoxTrue.Visible = false;
+                radioBoxFalse.Visible = false;
+                for (int j = 0; j < 5; j++)
+                {
+                    List<Label> lblIdIntrebare = GenereazaLblIdIntrebare(j);
+                    for (int i = 0; i < lblIdIntrebare.Count; i++)
+                    {
+                        lblIdIntrebare[i].Location = new Point(50 + j*100, 50 + 30 * i);
+                        this.tabPage1.Controls.Add(lblIdIntrebare[i]);
+                    }
+                }
+            }
+        }
+        public List<Label> GenereazaLblIdIntrebare(int col)
+        {
+            List<Label> lblraport = new List<Label>();
+            for (int i = 0; i < reportRaspunsuri.Rows.Count; i++)
+            {
+                Label label = new Label();
+                label.Text = reportRaspunsuri.Rows[i][col].ToString();
+                lblraport.Add(label);
+            }
+            return lblraport;
+        }
         private void button2_Click(object sender, EventArgs e)
         {
-            
-            
+
+            EndGame();
             button2.Enabled = false;
             button3.Enabled = true;
             if (idintrebare < 9)
@@ -205,12 +256,18 @@ namespace eLearningMareaUnire1918
 
         private void button3_Click(object sender, EventArgs e)
         {
+            
+            SqlConnection con = new SqlConnection(constr);
+            con.Open();
 
             button2.Enabled = true;
             button3.Enabled = false;
             if (tipIntrebare == 1)
             {
                 string raspunsCorect = dtNew.Rows[idintrebare - 1][2].ToString();
+
+                reportRaspunsuri.Rows.Add(Convert.ToInt32(dtNew.Rows[idintrebare - 1][7]), tipIntrebare, dtNew.Rows[idintrebare - 1][0].ToString(), txtRaspuns.Text.ToString(), raspunsCorect);
+
                 if (txtRaspuns.Text.Replace(" ", "").ToLower() == raspunsCorect.ToString().Replace(" ", "").ToLower())
                 {
                     punctaj++;
@@ -221,10 +278,12 @@ namespace eLearningMareaUnire1918
                 {
                     MessageBox.Show("Raspunsul corect era: " + raspunsCorect);
                 }
+                
             }
             else if (tipIntrebare == 2)
             {
                 int raspunsCorect = Convert.ToInt32(dtNew.Rows[idintrebare - 1][2].ToString());
+                
                 int raspunstulmeu = -1;
                 if (radioBox1.Checked == true)
                 {
@@ -242,6 +301,7 @@ namespace eLearningMareaUnire1918
                 {
                     raspunstulmeu = 4;
                 }
+                reportRaspunsuri.Rows.Add(Convert.ToInt32(dtNew.Rows[idintrebare - 1][7]), tipIntrebare, dtNew.Rows[idintrebare - 1][0].ToString(), raspunstulmeu.ToString(), raspunsCorect);
                 if (raspunsCorect == 1)
                 {
                     radioBox2.BackColor = Color.Red;
@@ -303,6 +363,7 @@ namespace eLearningMareaUnire1918
                 {
                     raspunsulmeu = raspunsulmeu + "4";
                 }
+                reportRaspunsuri.Rows.Add(Convert.ToInt32(dtNew.Rows[idintrebare - 1][7]), tipIntrebare, dtNew.Rows[idintrebare - 1][0].ToString(), raspunsulmeu, raspunsCorect);
                 if (raspunsCorect.ToString().Contains("1"))
                 {
                     checkBox1.BackColor = Color.Green;
@@ -365,7 +426,7 @@ namespace eLearningMareaUnire1918
                 else {
                     radioBoxTrue.BackColor = Color.Red;
                 }
-
+                reportRaspunsuri.Rows.Add(Convert.ToInt32(dtNew.Rows[idintrebare - 1][7]), tipIntrebare, dtNew.Rows[idintrebare - 1][0].ToString(), raspunsulmeu.ToString(), raspunsCorect);
                 if (raspunsCorect == raspunsulmeu)
                 {
                     punctaj++;
@@ -377,6 +438,22 @@ namespace eLearningMareaUnire1918
                     MessageBox.Show("Ai raspuns gresit!");
                 }
             }
+        con.Close();
+        }
+
+        private void testeToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            tabControl1.SelectedTab = tabPage1;
+        }
+
+        private void carnetDeNoteToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            tabControl1.SelectedTab = tabPage2;
+        }
+
+        private void graficNoteToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            tabControl1.SelectedTab = tabPage3;
         }
     }
 }
