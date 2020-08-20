@@ -9,6 +9,8 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Data.SqlClient;
 using System.Collections;
+using System.Globalization;
+
 namespace eLearningMareaUnire1918
 {
     public partial class eLearning1918_Elev : Form
@@ -18,6 +20,9 @@ namespace eLearningMareaUnire1918
             InitializeComponent();
             dtNew = tib;
         }
+        IFormatProvider culture = new CultureInfo("en-US", true);
+        string emailUtilizator = eLearning1918_start.emailElev;
+        public int idutilizator = -1;
         DataTable dtNew;
         public int punctaj = 1;
         public int tipIntrebare = -1;
@@ -198,8 +203,10 @@ namespace eLearningMareaUnire1918
         }
         public void EndGame()
         {
+           
             if (idintrebare == 9)
             {
+                
                 button1.Visible = false;
                 button2.Visible = false;
                 button3.Visible = false;
@@ -224,6 +231,9 @@ namespace eLearningMareaUnire1918
                         this.tabPage1.Controls.Add(lblIdIntrebare[i]);
                     }
                 }
+                SalveazaRezultat();
+                GraficNote();
+                CarnetNote();
             }
         }
         public List<Label> GenereazaLblIdIntrebare(int col)
@@ -454,6 +464,92 @@ namespace eLearningMareaUnire1918
         private void graficNoteToolStripMenuItem_Click(object sender, EventArgs e)
         {
             tabControl1.SelectedTab = tabPage3;
+        }
+        public void SalveazaRezultat()
+        {
+            SqlConnection con = new SqlConnection(constr);
+            con.Open();
+            SqlCommand cmd = new SqlCommand("select idutilizator from utilizatori where emailutilizator=@email", con);
+            cmd.Parameters.AddWithValue("email", emailUtilizator.ToString());
+            cmd.ExecuteNonQuery();
+
+            idutilizator = Convert.ToInt32(cmd.ExecuteScalar());
+           
+            DateTime dt = DateTime.Now;
+            
+          
+            SqlCommand cmd2;
+            cmd2 = new SqlCommand("insert into Evaluari(idelev,dataevaluare,notaevaluare) values(@ie,@de,@ne)", con);
+            cmd2.Parameters.AddWithValue("ie", idutilizator);
+            cmd2.Parameters.AddWithValue("de", dt);
+            cmd2.Parameters.AddWithValue("ne", punctaj);
+            cmd2.ExecuteNonQuery();
+            con.Close();
+        }
+        public void GraficNote()
+        {
+            SqlConnection con = new SqlConnection(constr);
+            con.Open();
+            SqlCommand cmd = new SqlCommand("select clasautilizator from utilizatori where idutilizator='" + idutilizator + "'", con);
+            string clasa = cmd.ToString();
+            cmd.ExecuteNonQuery();
+
+            cmd = new SqlCommand("select count(idelev) from evaluari where idelev='" + idutilizator + "'", con);
+            int n = Convert.ToInt32(cmd.ExecuteScalar());
+            cmd.ExecuteNonQuery();
+            cmd = new SqlCommand("select avg(notaevaluare) from evaluari", con);
+            int avg = Convert.ToInt32(cmd.ExecuteScalar());
+            cmd.ExecuteNonQuery();
+            DataTable tabel3 = new DataTable();
+            SqlDataAdapter sda = new SqlDataAdapter("SELECT idelev,notaevaluare FROM Evaluari WHERE idelev = '" + idutilizator + "'", con);
+            sda.Fill(tabel3);
+            for (int i = 0; i < n; i++)
+            {
+                int nota = Convert.ToInt32(tabel3.Rows[i][1].ToString());
+                this.chart1.Series["note"].Points.AddXY(0, nota);
+                this.chart1.Series["media"].Points.AddXY(0, avg);
+            }
+            con.Close();
+        }
+        public void CarnetNote()
+        {
+            SqlConnection con = new SqlConnection(constr);
+            con.Open();
+            SqlCommand cmd = new SqlCommand("select numeprenumeutilizator from utilizatori where idutilizator='" + idutilizator + "'", con);
+            string numeprenumeutilizator = cmd.ExecuteScalar().ToString();
+
+            label2.Text = numeprenumeutilizator.ToString();
+
+         
+            DataTable table = new DataTable();
+            cmd = new SqlCommand("select notaevaluare,dataevaluare FROM evaluari WHERE idelev='" + idutilizator + "'", con);
+            SqlDataAdapter sqlda = new SqlDataAdapter(cmd);
+
+            sqlda.Fill(table);
+            dataGridView1.DataSource = table;
+            dataGridView1.Columns[0].Name = "notaevaluare";
+            dataGridView1.Columns[1].Name = "dataevaluare";
+
+            con.Close();
+        }
+
+        private void iesireToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Application.Exit();
+        }
+
+        private void button5_Click(object sender, EventArgs e)
+        {
+            printPreviewDialog1.Document = printDocument1;
+            printPreviewDialog1.ShowDialog();
+        }
+
+        private void printDocument1_PrintPage(object sender, System.Drawing.Printing.PrintPageEventArgs e)
+        {
+            Bitmap bm = new Bitmap(this.dataGridView1.Width, this.dataGridView1.Height);
+            dataGridView1.DrawToBitmap(bm, new Rectangle(0, 0, this.dataGridView1.Width, this.dataGridView1.Height));
+            e.Graphics.DrawImage(bm, 100, 0);
+            e.Graphics.DrawString(label2.Text, new Font("Verdana", 22, FontStyle.Bold), Brushes.Black, new Point(120, 30));
         }
     }
 }

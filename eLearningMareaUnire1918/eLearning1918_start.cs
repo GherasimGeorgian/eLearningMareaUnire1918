@@ -22,6 +22,7 @@ namespace eLearningMareaUnire1918
         public static string constr = @"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=|DataDirectory|\eLearning1918.mdf;Integrated Security=True;Connect Timeout=30";
         bool playing = true;
         int counter = 0;
+        public static string emailElev = "";
         DataTable dtIntrebariGenerate = new DataTable();
         private void eLearning1918_start_Load(object sender, EventArgs e)
         {
@@ -133,6 +134,7 @@ namespace eLearningMareaUnire1918
             sda.Fill(dt);
             if (dt.Rows[0][0].ToString() == "1")
             {
+                emailElev = textBox1.Text;
                 GenereazaIntrebari();
                 this.Hide();
                 eLearning1918_Elev formElev = new eLearning1918_Elev(dtIntrebariGenerate);
