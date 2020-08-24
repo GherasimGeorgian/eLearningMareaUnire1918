@@ -10,10 +10,11 @@ using System.Windows.Forms;
 using System.Data.SqlClient;
 using System.Collections;
 using System.Globalization;
+using MaterialSkin.Controls;
 
 namespace eLearningMareaUnire1918
 {
-    public partial class eLearning1918_Elev : Form
+    public partial class eLearning1918_Elev : MaterialSkin.Controls.MaterialForm
     {
         public eLearning1918_Elev(DataTable tib)
         {
@@ -119,7 +120,7 @@ namespace eLearningMareaUnire1918
 
                 txtRaspuns.Visible = true;
                 txtRaspuns.Location = new Point(187, 201);
-                this.tabPage1.Controls.Add(txtRaspuns);
+                this.tpTeste.Controls.Add(txtRaspuns);
             }
             else if (tipIntrebare == 2)
             {
@@ -144,10 +145,10 @@ namespace eLearningMareaUnire1918
                 radioBox2.Location = new Point(187, 170);
                 radioBox3.Location = new Point(187, 190);
                 radioBox4.Location = new Point(187, 210);
-                this.tabPage1.Controls.Add(radioBox1);
-                this.tabPage1.Controls.Add(radioBox2);
-                this.tabPage1.Controls.Add(radioBox3);
-                this.tabPage1.Controls.Add(radioBox4);
+                this.tpTeste.Controls.Add(radioBox1);
+                this.tpTeste.Controls.Add(radioBox2);
+                this.tpTeste.Controls.Add(radioBox3);
+                this.tpTeste.Controls.Add(radioBox4);
             }
             else if (tipIntrebare == 3)
             {
@@ -172,10 +173,10 @@ namespace eLearningMareaUnire1918
                 checkBox2.Location = new Point(187, 170);
                 checkBox3.Location = new Point(187, 190);
                 checkBox4.Location = new Point(187, 210);
-                this.tabPage1.Controls.Add(checkBox1);
-                this.tabPage1.Controls.Add(checkBox2);
-                this.tabPage1.Controls.Add(checkBox3);
-                this.tabPage1.Controls.Add(checkBox4);
+                this.tpTeste.Controls.Add(checkBox1);
+                this.tpTeste.Controls.Add(checkBox2);
+                this.tpTeste.Controls.Add(checkBox3);
+                this.tpTeste.Controls.Add(checkBox4);
             }
             else if (tipIntrebare == 4)
             {
@@ -197,8 +198,8 @@ namespace eLearningMareaUnire1918
                 radioBoxTrue.Location = new Point(187, 150);
                 radioBoxFalse.Location = new Point(187, 170);
 
-                this.tabPage1.Controls.Add(radioBoxTrue);
-                this.tabPage1.Controls.Add(radioBoxFalse);
+                this.tpTeste.Controls.Add(radioBoxTrue);
+                this.tpTeste.Controls.Add(radioBoxFalse);
             }
         }
         public void EndGame()
@@ -228,7 +229,7 @@ namespace eLearningMareaUnire1918
                     for (int i = 0; i < lblIdIntrebare.Count; i++)
                     {
                         lblIdIntrebare[i].Location = new Point(50 + j*100, 50 + 30 * i);
-                        this.tabPage1.Controls.Add(lblIdIntrebare[i]);
+                        this.tpTeste.Controls.Add(lblIdIntrebare[i]);
                     }
                 }
                 SalveazaRezultat();
@@ -453,17 +454,17 @@ namespace eLearningMareaUnire1918
 
         private void testeToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            tabControl1.SelectedTab = tabPage1;
+            tabControl1.SelectedTab = tpTeste;
         }
 
         private void carnetDeNoteToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            tabControl1.SelectedTab = tabPage2;
+            tabControl1.SelectedTab = tpCarnet;
         }
 
         private void graficNoteToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            tabControl1.SelectedTab = tabPage3;
+            tabControl1.SelectedTab = tpGrafic;
         }
         public void SalveazaRezultat()
         {
@@ -550,6 +551,11 @@ namespace eLearningMareaUnire1918
             dataGridView1.DrawToBitmap(bm, new Rectangle(0, 0, this.dataGridView1.Width, this.dataGridView1.Height));
             e.Graphics.DrawImage(bm, 100, 0);
             e.Graphics.DrawString(label2.Text, new Font("Verdana", 22, FontStyle.Bold), Brushes.Black, new Point(120, 30));
+        }
+
+        private void tabControl1_Click(object sender, EventArgs e)
+        {
+           
         }
     }
 }

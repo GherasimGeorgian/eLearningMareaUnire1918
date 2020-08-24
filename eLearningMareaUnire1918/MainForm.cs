@@ -1,4 +1,6 @@
-﻿using System;
+﻿using MaterialSkin;
+using System;
+using MaterialSkin.Controls;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -10,35 +12,40 @@ using System.Windows.Forms;
 using System.Data.SqlClient;
 using System.IO;
 using System.Globalization;
+using System.Drawing.Drawing2D;
 
 namespace eLearningMareaUnire1918
 {
-    public partial class MainForm : Form
+    public partial class MainForm : MaterialSkin.Controls.MaterialForm
     {
+        MaterialSkinManager materialSkinManager;
         public MainForm()
         {
             InitializeComponent();
-          
+            materialSkinManager = MaterialSkinManager.Instance;
+            materialSkinManager.AddFormToManage(this);
+            materialSkinManager.Theme = MaterialSkinManager.Themes.DARK;
+            materialSkinManager.ColorScheme = new ColorScheme(
+                Primary.Green400, Primary.Green400, Primary.Green400, Accent.Green400, TextShade.WHITE);
         }
+        
         public static string constr = @"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=|DataDirectory|\eLearning1918.mdf;Integrated Security=True;Connect Timeout=30";
-        /// <summary>
-        /// Afisam formularul eLearning1918_start 
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void start_app_Click(object sender, EventArgs e)
-        {
-            eLearning1918_start w = new eLearning1918_start();
-            this.Hide();
-            w.Show();
-        }
+       /// <summary>
+       /// 1 - datele au fost incarcate in baza de date
+       /// 0 - datele nu au fost incarcate in baza de date
+       /// </summary>
+       int LoadDataBase = Properties.Settings.Default.loadDataBase;
 
         private void MainForm_Load(object sender, EventArgs e)
         {
             AppDomain.CurrentDomain.SetData("DataDirectory", Directory.GetCurrentDirectory());
-            sterge();
-            Initializare();
-            MessageBox.Show("Baza de date a fost actualizata!");
+            if (LoadDataBase == 0)
+            {
+                sterge();
+                Initializare();
+                Properties.Settings.Default.loadDataBase = 1;
+                Properties.Settings.Default.Save();
+            }
         }
         /// <summary>
         /// Stergem inrefistrarile din baza de date eLearning1918 respectiv dint tablele:Utilizatori,Itemi si Evaluari
@@ -67,6 +74,9 @@ namespace eLearningMareaUnire1918
             cmd.ExecuteNonQuery();
             con.Close();
         }
+        /// <summary>
+        /// Datele necesare aplicatiei sunt preluate din fisierul date.txt si incarcate in baza de date
+        /// </summary>
         private static void Initializare()
         {
             StreamReader sr = new StreamReader(Application.StartupPath + @"\..\..\date.txt");
@@ -143,6 +153,117 @@ namespace eLearningMareaUnire1918
                 cmd.Parameters.AddWithValue("ne", nota);
                 cmd.ExecuteNonQuery();
             }
+        }
+
+        private void btnStart_Click(object sender, EventArgs e)
+        {
+            eLearning1918_start w = new eLearning1918_start();
+            this.Hide();
+            w.Show();
+        }
+
+        private void materialRaisedButton1_Click(object sender, EventArgs e)
+        {
+            this.TopMost = true;
+        }
+
+        private void materialRaisedButton2_Click(object sender, EventArgs e)
+        {
+            this.TopMost = false;
+        }
+
+        private void checkBoxTM_CheckedChanged(object sender, EventArgs e)
+        {
+            if (checkBoxTM.Checked) {
+                this.TopMost = true;
+                checkBoxTM.Text = "UnTopMost";
+            } else {
+                this.TopMost = false;
+                checkBoxTM.Text = "TopMost";
+            }
+        }
+
+        private void btnRed_Click(object sender, EventArgs e)
+        {
+            materialSkinManager = MaterialSkinManager.Instance;
+            materialSkinManager.AddFormToManage(this);
+            materialSkinManager.ColorScheme = new ColorScheme(
+                Primary.Red400, Primary.Red400, Primary.Red400, Accent.Red400, TextShade.WHITE);
+        }
+
+        private void btnPurple_Click(object sender, EventArgs e)
+        {
+            materialSkinManager = MaterialSkinManager.Instance;
+            materialSkinManager.AddFormToManage(this);
+            materialSkinManager.ColorScheme = new ColorScheme(
+                Primary.Purple400, Primary.Purple400, Primary.Purple400, Accent.Purple400, TextShade.WHITE);
+        }
+
+        private void btnOrange_Click(object sender, EventArgs e)
+        {
+            materialSkinManager = MaterialSkinManager.Instance;
+            materialSkinManager.AddFormToManage(this);
+            materialSkinManager.ColorScheme = new ColorScheme(
+                Primary.Orange400, Primary.Orange400, Primary.Orange400, Accent.Orange400, TextShade.WHITE);
+        }
+
+        private void btnBlue_Click(object sender, EventArgs e)
+        {
+            materialSkinManager = MaterialSkinManager.Instance;
+            materialSkinManager.AddFormToManage(this);
+            materialSkinManager.ColorScheme = new ColorScheme(
+                Primary.Blue400, Primary.Blue400, Primary.Blue400, Accent.Blue400, TextShade.WHITE);
+        }
+
+        private void btnPink_Click(object sender, EventArgs e)
+        {
+            materialSkinManager = MaterialSkinManager.Instance;
+            materialSkinManager.AddFormToManage(this);
+            materialSkinManager.ColorScheme = new ColorScheme(
+                Primary.Pink400, Primary.Pink400, Primary.Pink400, Accent.Pink400, TextShade.WHITE);
+        }
+
+        private void btnGreen_Click(object sender, EventArgs e)
+        {
+            materialSkinManager = MaterialSkinManager.Instance;
+            materialSkinManager.AddFormToManage(this);
+            materialSkinManager.ColorScheme = new ColorScheme(
+                Primary.Green400, Primary.Green400, Primary.Green400, Accent.Green400, TextShade.WHITE);
+        }
+
+        private void checkBokTheme_CheckedChanged(object sender, EventArgs e)
+        {
+            if (lblTheme.Text == "dark")
+            {
+                materialSkinManager = MaterialSkinManager.Instance;
+                materialSkinManager.AddFormToManage(this);
+                materialSkinManager.Theme = MaterialSkinManager.Themes.DARK; 
+                checkBokTheme.Text = "light";
+                lblTheme.Text = "light";
+            }
+            else
+            {
+                materialSkinManager = MaterialSkinManager.Instance;
+                materialSkinManager.AddFormToManage(this);
+                materialSkinManager.Theme = MaterialSkinManager.Themes.LIGHT;
+                checkBokTheme.Text = "dark";
+                lblTheme.Text = "dark";
+            }
+        }
+
+        private void materialRaisedButton4_Click(object sender, EventArgs e)
+        {
+            materialSkinManager = MaterialSkinManager.Instance;
+            materialSkinManager.AddFormToManage(this);
+            materialSkinManager.Theme = MaterialSkinManager.Themes.LIGHT;
+           
+        }
+
+        private void materialRaisedButton3_Click(object sender, EventArgs e)
+        {
+            materialSkinManager = MaterialSkinManager.Instance;
+            materialSkinManager.AddFormToManage(this);
+            materialSkinManager.Theme = MaterialSkinManager.Themes.DARK;
         }
     }
 }

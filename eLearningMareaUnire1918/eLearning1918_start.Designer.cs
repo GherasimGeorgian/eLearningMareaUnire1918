@@ -29,34 +29,24 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            this.button4 = new System.Windows.Forms.Button();
             this.progressBar1 = new System.Windows.Forms.ProgressBar();
             this.label6 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
             this.textBox2 = new System.Windows.Forms.TextBox();
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.label4 = new System.Windows.Forms.Label();
-            this.button3 = new System.Windows.Forms.Button();
-            this.button2 = new System.Windows.Forms.Button();
-            this.button1 = new System.Windows.Forms.Button();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.label3 = new System.Windows.Forms.Label();
             this.richTextBox1 = new System.Windows.Forms.RichTextBox();
             this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
+            this.btnInapoi = new MaterialSkin.Controls.MaterialRaisedButton();
+            this.btnAuto = new MaterialSkin.Controls.MaterialRaisedButton();
+            this.btnInainte = new MaterialSkin.Controls.MaterialRaisedButton();
+            this.btnLogIn = new MaterialSkin.Controls.MaterialRaisedButton();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
-            // 
-            // button4
-            // 
-            this.button4.Location = new System.Drawing.Point(755, 261);
-            this.button4.Name = "button4";
-            this.button4.Size = new System.Drawing.Size(143, 23);
-            this.button4.TabIndex = 30;
-            this.button4.Text = "Log in";
-            this.button4.UseVisualStyleBackColor = true;
-            this.button4.Click += new System.EventHandler(this.button4_Click);
             // 
             // progressBar1
             // 
@@ -105,36 +95,6 @@
             this.label4.Size = new System.Drawing.Size(81, 13);
             this.label4.TabIndex = 24;
             this.label4.Text = "Intra in aplicatie";
-            // 
-            // button3
-            // 
-            this.button3.Location = new System.Drawing.Point(618, 344);
-            this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(75, 23);
-            this.button3.TabIndex = 23;
-            this.button3.Text = "Inainte";
-            this.button3.UseVisualStyleBackColor = true;
-            this.button3.Click += new System.EventHandler(this.button3_Click);
-            // 
-            // button2
-            // 
-            this.button2.Location = new System.Drawing.Point(476, 344);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(75, 23);
-            this.button2.TabIndex = 22;
-            this.button2.Text = "Auto";
-            this.button2.UseVisualStyleBackColor = true;
-            this.button2.Click += new System.EventHandler(this.button2_Click);
-            // 
-            // button1
-            // 
-            this.button1.Location = new System.Drawing.Point(311, 344);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(75, 23);
-            this.button1.TabIndex = 21;
-            this.button1.Text = "Inapoi";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
             // pictureBox1
             // 
@@ -185,21 +145,85 @@
             this.timer1.Interval = 1000;
             this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
             // 
+            // btnInapoi
+            // 
+            this.btnInapoi.AutoSize = true;
+            this.btnInapoi.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.btnInapoi.Depth = 0;
+            this.btnInapoi.Icon = null;
+            this.btnInapoi.Location = new System.Drawing.Point(350, 337);
+            this.btnInapoi.MouseState = MaterialSkin.MouseState.HOVER;
+            this.btnInapoi.Name = "btnInapoi";
+            this.btnInapoi.Primary = true;
+            this.btnInapoi.Size = new System.Drawing.Size(66, 36);
+            this.btnInapoi.TabIndex = 31;
+            this.btnInapoi.Text = "Inapoi";
+            this.btnInapoi.UseVisualStyleBackColor = true;
+            this.btnInapoi.Click += new System.EventHandler(this.btnInapoi_Click);
+            // 
+            // btnAuto
+            // 
+            this.btnAuto.AutoSize = true;
+            this.btnAuto.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.btnAuto.Depth = 0;
+            this.btnAuto.Icon = null;
+            this.btnAuto.Location = new System.Drawing.Point(476, 337);
+            this.btnAuto.MouseState = MaterialSkin.MouseState.HOVER;
+            this.btnAuto.Name = "btnAuto";
+            this.btnAuto.Primary = true;
+            this.btnAuto.Size = new System.Drawing.Size(57, 36);
+            this.btnAuto.TabIndex = 33;
+            this.btnAuto.Text = "Auto";
+            this.btnAuto.UseVisualStyleBackColor = true;
+            this.btnAuto.Click += new System.EventHandler(this.btnAuto_Click);
+            // 
+            // btnInainte
+            // 
+            this.btnInainte.AutoSize = true;
+            this.btnInainte.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.btnInainte.Depth = 0;
+            this.btnInainte.Icon = null;
+            this.btnInainte.Location = new System.Drawing.Point(591, 337);
+            this.btnInainte.MouseState = MaterialSkin.MouseState.HOVER;
+            this.btnInainte.Name = "btnInainte";
+            this.btnInainte.Primary = true;
+            this.btnInainte.Size = new System.Drawing.Size(73, 36);
+            this.btnInainte.TabIndex = 35;
+            this.btnInainte.Text = "Inainte";
+            this.btnInainte.UseVisualStyleBackColor = true;
+            this.btnInainte.Click += new System.EventHandler(this.btnInainte_Click);
+            // 
+            // btnLogIn
+            // 
+            this.btnLogIn.AutoSize = true;
+            this.btnLogIn.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.btnLogIn.Depth = 0;
+            this.btnLogIn.Icon = null;
+            this.btnLogIn.Location = new System.Drawing.Point(808, 248);
+            this.btnLogIn.MouseState = MaterialSkin.MouseState.HOVER;
+            this.btnLogIn.Name = "btnLogIn";
+            this.btnLogIn.Primary = true;
+            this.btnLogIn.Size = new System.Drawing.Size(64, 36);
+            this.btnLogIn.TabIndex = 36;
+            this.btnLogIn.Text = "Log In";
+            this.btnLogIn.UseVisualStyleBackColor = true;
+            this.btnLogIn.Click += new System.EventHandler(this.btnLogIn_Click);
+            // 
             // eLearning1918_start
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1002, 448);
-            this.Controls.Add(this.button4);
+            this.Controls.Add(this.btnLogIn);
+            this.Controls.Add(this.btnInainte);
+            this.Controls.Add(this.btnAuto);
+            this.Controls.Add(this.btnInapoi);
             this.Controls.Add(this.progressBar1);
             this.Controls.Add(this.label6);
             this.Controls.Add(this.label5);
             this.Controls.Add(this.textBox2);
             this.Controls.Add(this.textBox1);
             this.Controls.Add(this.label4);
-            this.Controls.Add(this.button3);
-            this.Controls.Add(this.button2);
-            this.Controls.Add(this.button1);
             this.Controls.Add(this.pictureBox1);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.richTextBox1);
@@ -215,22 +239,21 @@
         }
 
         #endregion
-
-        private System.Windows.Forms.Button button4;
         private System.Windows.Forms.ProgressBar progressBar1;
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.TextBox textBox2;
         private System.Windows.Forms.TextBox textBox1;
         private System.Windows.Forms.Label label4;
-        private System.Windows.Forms.Button button3;
-        private System.Windows.Forms.Button button2;
-        private System.Windows.Forms.Button button1;
         private System.Windows.Forms.PictureBox pictureBox1;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.RichTextBox richTextBox1;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Timer timer1;
+        private MaterialSkin.Controls.MaterialRaisedButton btnInapoi;
+        private MaterialSkin.Controls.MaterialRaisedButton btnAuto;
+        private MaterialSkin.Controls.MaterialRaisedButton btnInainte;
+        private MaterialSkin.Controls.MaterialRaisedButton btnLogIn;
     }
 }

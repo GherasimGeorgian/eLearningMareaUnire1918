@@ -11,13 +11,16 @@ using System.Data.SqlClient;
 using System.IO;
 using System.Text.RegularExpressions;
 using System.Globalization;
+using MaterialSkin;
+using MaterialSkin.Controls;
 namespace eLearningMareaUnire1918
 {
-    public partial class eLearning1918_start : Form
+    public partial class eLearning1918_start : MaterialSkin.Controls.MaterialForm
     {
         public eLearning1918_start()
         {
             InitializeComponent();
+          
         }
         public static string constr = @"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=|DataDirectory|\eLearning1918.mdf;Integrated Security=True;Connect Timeout=30";
         bool playing = true;
@@ -39,21 +42,7 @@ namespace eLearningMareaUnire1918
             }
         }
         
-        private void button2_Click(object sender, EventArgs e)
-        {
-            if (!playing)
-            {
-                button2.Text = "Auto";
-                timer1.Start();
-                playing = true;
-            }
-            else
-            {
-                button2.Text = "Manual";
-                playing = false;
-                timer1.Stop();
-            }
-        }
+       
 
         private void timer1_Tick(object sender, EventArgs e)
         {
@@ -67,35 +56,8 @@ namespace eLearningMareaUnire1918
             progressBar1.Value = counter;
         }
 
-        private void button3_Click(object sender, EventArgs e)
-        {
-            if (button2.Text == "Manual")
-            {
-                string[] files = Directory.GetFiles(Application.StartupPath + @"\..\..\imaginislideshow\", "*.jpg*");
-
-                if (counter < files.Length - 1)
-                    counter++;
-                pictureBox1.Image = Image.FromFile(files[counter]);
-                progressBar1.Maximum = files.Length - 1;
-                progressBar1.Step = 1;
-                progressBar1.Value = counter;
-            }
-        }
-
-        private void button1_Click(object sender, EventArgs e)
-        {
-            if (button2.Text == "Manual")
-            {
-                if (counter > 0)
-                    counter--;
-
-                string[] files = Directory.GetFiles(Application.StartupPath + @"\..\..\imaginislideshow\", "*.jpg*");
-                pictureBox1.Image = Image.FromFile(files[counter]);
-                progressBar1.Maximum = files.Length - 1;
-                progressBar1.Step = 1;
-                progressBar1.Value = counter;
-            }
-        }
+      
+      
         public void GenereazaIntrebari()
         {
             SqlConnection con = new SqlConnection(constr);
@@ -110,12 +72,25 @@ namespace eLearningMareaUnire1918
             int tip4 = Convert.ToInt32(dt2.Rows[3][0].ToString());
             HashSet<int> numbers = new HashSet<int>();
 
-            while (numbers.Count <= 10)
+            while (numbers.Count < 3)
             {
                 numbers.Add(rnd.Next(tip1 + tip2 + tip3 + 1, tip1 + tip2 + tip3+ tip4));
-                numbers.Add(rnd.Next(tip1 + tip2 + 1, tip1 + tip2 + tip3));
+            }
+            while (numbers.Count < 5)
+            {
+             numbers.Add(rnd.Next(tip1 + tip2 + 1, tip1 + tip2 + tip3));
+            }
+            while (numbers.Count < 6)
+            {
+               
                 numbers.Add(rnd.Next(1, tip1));
-                numbers.Add(rnd.Next(tip1+1, tip1+tip2));
+                
+
+            }
+            while (numbers.Count < 10)
+            {
+             
+                numbers.Add(rnd.Next(tip1 + 1, tip1 + tip2));
 
             }
 
@@ -125,8 +100,57 @@ namespace eLearningMareaUnire1918
                 sda3.Fill(dtIntrebariGenerate);
             }
             con.Close();
+            MessageBox.Show(numbers.Count.ToString());
         }
-        private void button4_Click(object sender, EventArgs e)
+      
+
+        private void btnInapoi_Click(object sender, EventArgs e)
+        {
+            if (btnAuto.Text == "Manual")
+            {
+                if (counter > 0)
+                    counter--;
+
+                string[] files = Directory.GetFiles(Application.StartupPath + @"\..\..\imaginislideshow\", "*.jpg*");
+                pictureBox1.Image = Image.FromFile(files[counter]);
+                progressBar1.Maximum = files.Length - 1;
+                progressBar1.Step = 1;
+                progressBar1.Value = counter;
+            }
+        }
+
+        private void btnAuto_Click(object sender, EventArgs e)
+        {
+            if (!playing)
+            {
+                btnAuto.Text = "Auto";
+                timer1.Start();
+                playing = true;
+            }
+            else
+            {
+                btnAuto.Text = "Manual";
+                playing = false;
+                timer1.Stop();
+            }
+        }
+
+        private void btnInainte_Click(object sender, EventArgs e)
+        {
+            if (btnAuto.Text == "Manual")
+            {
+                string[] files = Directory.GetFiles(Application.StartupPath + @"\..\..\imaginislideshow\", "*.jpg*");
+
+                if (counter < files.Length - 1)
+                    counter++;
+                pictureBox1.Image = Image.FromFile(files[counter]);
+                progressBar1.Maximum = files.Length - 1;
+                progressBar1.Step = 1;
+                progressBar1.Value = counter;
+            }
+        }
+
+        private void btnLogIn_Click(object sender, EventArgs e)
         {
             SqlConnection con = new SqlConnection(constr);
             SqlDataAdapter sda = new SqlDataAdapter("select count(*) from utilizatori where emailutilizator='" + textBox1.Text + "' and parolautilizator='" + textBox2.Text + "'", con);
