@@ -60,7 +60,7 @@
             this.materialTabSelector1.Location = new System.Drawing.Point(-3, 64);
             this.materialTabSelector1.MouseState = MaterialSkin.MouseState.HOVER;
             this.materialTabSelector1.Name = "materialTabSelector1";
-            this.materialTabSelector1.Size = new System.Drawing.Size(807, 66);
+            this.materialTabSelector1.Size = new System.Drawing.Size(807, 88);
             this.materialTabSelector1.TabIndex = 3;
             this.materialTabSelector1.Text = "materialTabSelector1";
             // 
@@ -70,11 +70,11 @@
             this.materialTabControl1.Controls.Add(this.SettingstabPage);
             this.materialTabControl1.Controls.Add(this.ColorstabPage);
             this.materialTabControl1.Depth = 0;
-            this.materialTabControl1.Location = new System.Drawing.Point(-3, 127);
+            this.materialTabControl1.Location = new System.Drawing.Point(-3, 136);
             this.materialTabControl1.MouseState = MaterialSkin.MouseState.HOVER;
             this.materialTabControl1.Name = "materialTabControl1";
             this.materialTabControl1.SelectedIndex = 0;
-            this.materialTabControl1.Size = new System.Drawing.Size(807, 324);
+            this.materialTabControl1.Size = new System.Drawing.Size(807, 315);
             this.materialTabControl1.TabIndex = 5;
             // 
             // HometabPage
@@ -83,7 +83,7 @@
             this.HometabPage.Location = new System.Drawing.Point(4, 22);
             this.HometabPage.Name = "HometabPage";
             this.HometabPage.Padding = new System.Windows.Forms.Padding(3);
-            this.HometabPage.Size = new System.Drawing.Size(799, 298);
+            this.HometabPage.Size = new System.Drawing.Size(799, 289);
             this.HometabPage.TabIndex = 0;
             this.HometabPage.Text = "Home";
             this.HometabPage.UseVisualStyleBackColor = true;
@@ -112,7 +112,7 @@
             this.SettingstabPage.Location = new System.Drawing.Point(4, 22);
             this.SettingstabPage.Name = "SettingstabPage";
             this.SettingstabPage.Padding = new System.Windows.Forms.Padding(3);
-            this.SettingstabPage.Size = new System.Drawing.Size(783, 298);
+            this.SettingstabPage.Size = new System.Drawing.Size(799, 298);
             this.SettingstabPage.TabIndex = 1;
             this.SettingstabPage.Text = "Settings";
             this.SettingstabPage.UseVisualStyleBackColor = true;
@@ -181,7 +181,7 @@
             this.ColorstabPage.Location = new System.Drawing.Point(4, 22);
             this.ColorstabPage.Name = "ColorstabPage";
             this.ColorstabPage.Padding = new System.Windows.Forms.Padding(3);
-            this.ColorstabPage.Size = new System.Drawing.Size(783, 298);
+            this.ColorstabPage.Size = new System.Drawing.Size(799, 298);
             this.ColorstabPage.TabIndex = 2;
             this.ColorstabPage.Text = "Colors";
             this.ColorstabPage.UseVisualStyleBackColor = true;
@@ -354,6 +354,7 @@
             this.Controls.Add(this.materialTabSelector1);
             this.Name = "MainForm";
             this.Text = "eLearningMareaUnire1918";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainForm_FormClosing);
             this.Load += new System.EventHandler(this.MainForm_Load);
             this.materialTabControl1.ResumeLayout(false);
             this.HometabPage.ResumeLayout(false);

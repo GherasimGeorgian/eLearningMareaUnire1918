@@ -72,35 +72,32 @@ namespace eLearningMareaUnire1918
             int tip4 = Convert.ToInt32(dt2.Rows[3][0].ToString());
             HashSet<int> numbers = new HashSet<int>();
 
+            // generam 3 intrebari de tip 4
             while (numbers.Count < 3)
             {
                 numbers.Add(rnd.Next(tip1 + tip2 + tip3 + 1, tip1 + tip2 + tip3+ tip4));
             }
+            // generam 2 intrebari de tip 3
             while (numbers.Count < 5)
             {
              numbers.Add(rnd.Next(tip1 + tip2 + 1, tip1 + tip2 + tip3));
             }
+            // generam 1 intrebari de tip 1
             while (numbers.Count < 6)
             {
-               
                 numbers.Add(rnd.Next(1, tip1));
-                
-
             }
+            // generam 4 intrebari de tip 2
             while (numbers.Count < 10)
             {
-             
                 numbers.Add(rnd.Next(tip1 + 1, tip1 + tip2));
-
             }
-
             foreach (int tipitem in numbers)
             {
                 SqlDataAdapter sda3 = new SqlDataAdapter("SELECT EnuntItem,TipItem,RaspunsCorectItem,Raspuns1Item,Raspuns2Item,Raspuns3Item,Raspuns4Item,IdItem FROM Itemi WHERE IdItem = '" + tipitem + "'", con);
                 sda3.Fill(dtIntrebariGenerate);
             }
             con.Close();
-            MessageBox.Show(numbers.Count.ToString());
         }
       
 

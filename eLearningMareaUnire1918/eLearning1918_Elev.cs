@@ -27,7 +27,7 @@ namespace eLearningMareaUnire1918
         DataTable dtNew;
         public int punctaj = 1;
         public int tipIntrebare = -1;
-        public int idintrebare= 0;
+        public int idintrebare = 0;
         TextBox txtRaspuns = new TextBox();
         RadioButton radioBox1 = new RadioButton();
         RadioButton radioBox2 = new RadioButton();
@@ -41,6 +41,7 @@ namespace eLearningMareaUnire1918
 
         RadioButton radioBoxTrue = new RadioButton();
         RadioButton radioBoxFalse = new RadioButton();
+        
 
         DataTable reportRaspunsuri = new DataTable();
 
@@ -48,7 +49,59 @@ namespace eLearningMareaUnire1918
 
         private void eLearning1918_Elev_Load(object sender, EventArgs e)
         {
-            label1.Text = "Punctaj" + punctaj.ToString();
+            
+
+            SqlConnection con = new SqlConnection(constr);
+            con.Open();
+            SqlCommand cmd = new SqlCommand("select idutilizator from utilizatori where emailutilizator=@email", con);
+            cmd.Parameters.AddWithValue("email", emailUtilizator.ToString());
+            cmd.ExecuteNonQuery();
+
+            idutilizator = Convert.ToInt32(cmd.ExecuteScalar());
+
+            con.Close();
+            GraficNote();
+            CarnetNote();
+            //events
+            radioBoxTrue.CheckedChanged += new EventHandler(radioBoxTrue_CheckedChanged);
+            radioBoxFalse.CheckedChanged += new EventHandler(radioBoxFalse_CheckedChanged);
+            radioBox1.CheckedChanged += new EventHandler(radioBox1_CheckedChanged);
+            radioBox2.CheckedChanged += new EventHandler(radioBox2_CheckedChanged);
+            radioBox3.CheckedChanged += new EventHandler(radioBox3_CheckedChanged);
+            radioBox4.CheckedChanged += new EventHandler(radioBox4_CheckedChanged);
+            checkBox1.CheckedChanged += new EventHandler(checkBox1_CheckedChanged);
+            checkBox2.CheckedChanged += new EventHandler(checkBox2_CheckedChanged);
+            checkBox3.CheckedChanged += new EventHandler(checkBox3_CheckedChanged);
+            checkBox4.CheckedChanged += new EventHandler(checkBox4_CheckedChanged);
+            txtRaspuns.TextChanged += new EventHandler(txtRaspuns_TextChanged);
+
+            //font
+            radioBox1.Font =  new Font(FontFamily.GenericSansSerif, 12.0F, FontStyle.Bold);
+            radioBox2.Font =  new Font(FontFamily.GenericSansSerif, 12.0F, FontStyle.Bold);
+            radioBox3.Font =  new Font(FontFamily.GenericSansSerif, 12.0F, FontStyle.Bold);
+            radioBox4.Font =  new Font(FontFamily.GenericSansSerif, 12.0F, FontStyle.Bold);
+            checkBox1.Font =  new Font(FontFamily.GenericSansSerif, 12.0F, FontStyle.Bold);
+            checkBox2.Font =  new Font(FontFamily.GenericSansSerif, 12.0F, FontStyle.Bold);
+            checkBox3.Font =  new Font(FontFamily.GenericSansSerif, 12.0F, FontStyle.Bold);
+            checkBox4.Font =  new Font(FontFamily.GenericSansSerif, 12.0F, FontStyle.Bold);
+            radioBoxTrue.Font = new Font(FontFamily.GenericSansSerif, 12.0F, FontStyle.Bold);
+            radioBoxFalse.Font = new Font(FontFamily.GenericSansSerif, 12.0F, FontStyle.Bold);
+            txtRaspuns.Font = new Font(FontFamily.GenericSansSerif, 12.0F, FontStyle.Bold);
+            //size
+            radioBox1.Size = new Size(300, 25);
+            radioBox2.Size = new Size(300, 25);
+            radioBox3.Size = new Size(300, 25);
+            radioBox4.Size = new Size(300, 25);
+            radioBox1.Size = new Size(300, 25);
+            radioBox2.Size = new Size(300, 25);
+            radioBox3.Size = new Size(300, 25);
+            radioBox4.Size = new Size(300, 25);
+            radioBoxTrue.Size = new Size(300, 25);
+            radioBoxFalse.Size = new Size(300, 25);
+
+            richTextBox1.ReadOnly = true;
+            richTextBox1.Visible = false;
+            label1.Text = "Punctaj : " + punctaj.ToString();
             button2.Enabled = false;
             button3.Enabled = false;
             radioBox1.BackColor = Color.Transparent;
@@ -68,13 +121,7 @@ namespace eLearningMareaUnire1918
             reportRaspunsuri.Columns.Add("RaspunsCorect", typeof(string));
         }
 
-        private void button1_Click(object sender, EventArgs e)
-        {
-            genereazaIntrebare(idintrebare);
-            idintrebare++;
-            button1.Enabled = false;
-            button3.Enabled = true;
-        }
+
         public void genereazaIntrebare(int nrintrebare)
         {
             checkBox1.Checked = false;
@@ -204,10 +251,10 @@ namespace eLearningMareaUnire1918
         }
         public void EndGame()
         {
-           
+
             if (idintrebare == 9)
             {
-                
+
                 button1.Visible = false;
                 button2.Visible = false;
                 button3.Visible = false;
@@ -228,7 +275,7 @@ namespace eLearningMareaUnire1918
                     List<Label> lblIdIntrebare = GenereazaLblIdIntrebare(j);
                     for (int i = 0; i < lblIdIntrebare.Count; i++)
                     {
-                        lblIdIntrebare[i].Location = new Point(50 + j*100, 50 + 30 * i);
+                        lblIdIntrebare[i].Location = new Point(50 + j * 100, 50 + 30 * i);
                         this.tpTeste.Controls.Add(lblIdIntrebare[i]);
                     }
                 }
@@ -248,12 +295,138 @@ namespace eLearningMareaUnire1918
             }
             return lblraport;
         }
-        private void button2_Click(object sender, EventArgs e)
+
+
+
+
+        private void testeToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            tabControl1.SelectedTab = tpTeste;
+        }
+
+        private void carnetDeNoteToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            tabControl1.SelectedTab = tpCarnet;
+        }
+
+        private void graficNoteToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            tabControl1.SelectedTab = tpGrafic;
+        }
+        public void SalveazaRezultat()
+        {
+            SqlConnection con = new SqlConnection(constr);
+            con.Open();
+          
+            DateTime dt = DateTime.Now;
+
+
+            SqlCommand cmd2;
+            cmd2 = new SqlCommand("insert into Evaluari(idelev,dataevaluare,notaevaluare) values(@ie,@de,@ne)", con);
+            cmd2.Parameters.AddWithValue("ie", idutilizator);
+            cmd2.Parameters.AddWithValue("de", dt);
+            cmd2.Parameters.AddWithValue("ne", punctaj);
+            cmd2.ExecuteNonQuery();
+            con.Close();
+        }
+        public void GraficNote()
+        {
+            foreach (var series in chart1.Series)
+            {
+                series.Points.Clear();
+            }
+            
+            SqlConnection con = new SqlConnection(constr);
+            con.Open();
+            SqlCommand cmd = new SqlCommand("select clasautilizator from utilizatori where idutilizator='" + idutilizator + "'", con);
+            string clasa = cmd.ToString();
+            cmd.ExecuteNonQuery();
+
+            cmd = new SqlCommand("select count(idelev) from evaluari where idelev='" + idutilizator + "'", con);
+            int n = Convert.ToInt32(cmd.ExecuteScalar());
+            cmd.ExecuteNonQuery();
+            cmd = new SqlCommand("select avg(notaevaluare) from evaluari", con);
+            int avg = Convert.ToInt32(cmd.ExecuteScalar());
+            cmd.ExecuteNonQuery();
+            DataTable tabel3 = new DataTable();
+            SqlDataAdapter sda = new SqlDataAdapter("SELECT idelev,notaevaluare FROM Evaluari WHERE idelev = '" + idutilizator + "'", con);
+            sda.Fill(tabel3);
+            for (int i = 0; i < n; i++)
+            {
+                int nota = Convert.ToInt32(tabel3.Rows[i][1].ToString());
+                this.chart1.Series["note"].Points.AddXY(0, nota);
+                this.chart1.Series["media"].Points.AddXY(0, avg);
+            }
+            con.Close();
+        }
+        public void CarnetNote()
+        {
+            this.dataGridView1.DataSource = null;
+            dataGridView1.Rows.Clear();
+         
+            SqlConnection con = new SqlConnection(constr);
+            con.Open();
+            SqlCommand cmd = new SqlCommand("select numeprenumeutilizator from utilizatori where idutilizator='" + idutilizator + "'", con);
+            string numeprenumeutilizator = cmd.ExecuteScalar().ToString();
+
+            label2.Text = numeprenumeutilizator.ToString();
+
+
+            DataTable table = new DataTable();
+            cmd = new SqlCommand("select notaevaluare,dataevaluare FROM evaluari WHERE idelev='" + idutilizator + "'", con);
+            SqlDataAdapter sqlda = new SqlDataAdapter(cmd);
+
+            sqlda.Fill(table);
+            dataGridView1.DataSource = table;
+            dataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+            dataGridView1.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.None;
+            dataGridView1.AllowUserToOrderColumns = true;
+            dataGridView1.AllowUserToResizeColumns = true;
+            dataGridView1.Columns[0].Name = "Nota Evaluare";
+            dataGridView1.Columns[1].Name = "Data Evaluare";
+            
+
+            con.Close();
+        }
+
+        private void iesireToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Application.Exit();
+        }
+
+        private void button5_Click(object sender, EventArgs e)
+        {
+            printPreviewDialog1.Document = printDocument1;
+            printPreviewDialog1.ShowDialog();
+        }
+
+        private void printDocument1_PrintPage(object sender, System.Drawing.Printing.PrintPageEventArgs e)
+        {
+            Bitmap bm = new Bitmap(this.dataGridView1.Width, this.dataGridView1.Height);
+            dataGridView1.DrawToBitmap(bm, new Rectangle(0, 0, this.dataGridView1.Width, this.dataGridView1.Height));
+            e.Graphics.DrawImage(bm, 100, 0);
+            e.Graphics.DrawString(label2.Text, new Font("Verdana", 22, FontStyle.Bold), Brushes.Black, new Point(120, 30));
+        }
+
+        private void tabControl1_Click(object sender, EventArgs e)
         {
 
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            richTextBox1.Visible = true;
+            genereazaIntrebare(idintrebare);
+            idintrebare++;
+            button1.Enabled = false;
+            button3.Enabled = false;
+        }
+
+        private void button2_Click_1(object sender, EventArgs e)
+        {
             EndGame();
             button2.Enabled = false;
-            button3.Enabled = true;
+           
             if (idintrebare < 9)
             {
                 genereazaIntrebare(idintrebare);
@@ -263,16 +436,16 @@ namespace eLearningMareaUnire1918
             {
                 button2.Enabled = false;
             }
+            button3.Enabled = false;
         }
 
-        private void button3_Click(object sender, EventArgs e)
+        private void button3_Click_1(object sender, EventArgs e)
         {
-            
             SqlConnection con = new SqlConnection(constr);
             con.Open();
 
             button2.Enabled = true;
-            button3.Enabled = false;
+            
             if (tipIntrebare == 1)
             {
                 string raspunsCorect = dtNew.Rows[idintrebare - 1][2].ToString();
@@ -289,12 +462,12 @@ namespace eLearningMareaUnire1918
                 {
                     MessageBox.Show("Raspunsul corect era: " + raspunsCorect);
                 }
-                
+
             }
             else if (tipIntrebare == 2)
             {
                 int raspunsCorect = Convert.ToInt32(dtNew.Rows[idintrebare - 1][2].ToString());
-                
+
                 int raspunstulmeu = -1;
                 if (radioBox1.Checked == true)
                 {
@@ -433,10 +606,15 @@ namespace eLearningMareaUnire1918
                 if (raspunsCorect == 1)
                 {
                     radioBoxTrue.BackColor = Color.Green;
+                    radioBoxFalse.BackColor = Color.Red;
                 }
-                else {
+                else
+                {
                     radioBoxTrue.BackColor = Color.Red;
+                    radioBoxFalse.BackColor = Color.Green;
                 }
+
+
                 reportRaspunsuri.Rows.Add(Convert.ToInt32(dtNew.Rows[idintrebare - 1][7]), tipIntrebare, dtNew.Rows[idintrebare - 1][0].ToString(), raspunsulmeu.ToString(), raspunsCorect);
                 if (raspunsCorect == raspunsulmeu)
                 {
@@ -449,113 +627,62 @@ namespace eLearningMareaUnire1918
                     MessageBox.Show("Ai raspuns gresit!");
                 }
             }
-        con.Close();
-        }
-
-        private void testeToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            tabControl1.SelectedTab = tpTeste;
-        }
-
-        private void carnetDeNoteToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            tabControl1.SelectedTab = tpCarnet;
-        }
-
-        private void graficNoteToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            tabControl1.SelectedTab = tpGrafic;
-        }
-        public void SalveazaRezultat()
-        {
-            SqlConnection con = new SqlConnection(constr);
-            con.Open();
-            SqlCommand cmd = new SqlCommand("select idutilizator from utilizatori where emailutilizator=@email", con);
-            cmd.Parameters.AddWithValue("email", emailUtilizator.ToString());
-            cmd.ExecuteNonQuery();
-
-            idutilizator = Convert.ToInt32(cmd.ExecuteScalar());
-           
-            DateTime dt = DateTime.Now;
-            
-          
-            SqlCommand cmd2;
-            cmd2 = new SqlCommand("insert into Evaluari(idelev,dataevaluare,notaevaluare) values(@ie,@de,@ne)", con);
-            cmd2.Parameters.AddWithValue("ie", idutilizator);
-            cmd2.Parameters.AddWithValue("de", dt);
-            cmd2.Parameters.AddWithValue("ne", punctaj);
-            cmd2.ExecuteNonQuery();
             con.Close();
+            button3.Enabled = false;
         }
-        public void GraficNote()
+
+        private void eLearning1918_Elev_FormClosed(object sender, FormClosedEventArgs e)
         {
-            SqlConnection con = new SqlConnection(constr);
-            con.Open();
-            SqlCommand cmd = new SqlCommand("select clasautilizator from utilizatori where idutilizator='" + idutilizator + "'", con);
-            string clasa = cmd.ToString();
-            cmd.ExecuteNonQuery();
-
-            cmd = new SqlCommand("select count(idelev) from evaluari where idelev='" + idutilizator + "'", con);
-            int n = Convert.ToInt32(cmd.ExecuteScalar());
-            cmd.ExecuteNonQuery();
-            cmd = new SqlCommand("select avg(notaevaluare) from evaluari", con);
-            int avg = Convert.ToInt32(cmd.ExecuteScalar());
-            cmd.ExecuteNonQuery();
-            DataTable tabel3 = new DataTable();
-            SqlDataAdapter sda = new SqlDataAdapter("SELECT idelev,notaevaluare FROM Evaluari WHERE idelev = '" + idutilizator + "'", con);
-            sda.Fill(tabel3);
-            for (int i = 0; i < n; i++)
-            {
-                int nota = Convert.ToInt32(tabel3.Rows[i][1].ToString());
-                this.chart1.Series["note"].Points.AddXY(0, nota);
-                this.chart1.Series["media"].Points.AddXY(0, avg);
-            }
-            con.Close();
+            this.Close();
         }
-        public void CarnetNote()
+        private void radioBoxTrue_CheckedChanged(object sender, EventArgs e)
         {
-            SqlConnection con = new SqlConnection(constr);
-            con.Open();
-            SqlCommand cmd = new SqlCommand("select numeprenumeutilizator from utilizatori where idutilizator='" + idutilizator + "'", con);
-            string numeprenumeutilizator = cmd.ExecuteScalar().ToString();
-
-            label2.Text = numeprenumeutilizator.ToString();
-
-         
-            DataTable table = new DataTable();
-            cmd = new SqlCommand("select notaevaluare,dataevaluare FROM evaluari WHERE idelev='" + idutilizator + "'", con);
-            SqlDataAdapter sqlda = new SqlDataAdapter(cmd);
-
-            sqlda.Fill(table);
-            dataGridView1.DataSource = table;
-            dataGridView1.Columns[0].Name = "notaevaluare";
-            dataGridView1.Columns[1].Name = "dataevaluare";
-
-            con.Close();
+            button3.Enabled = true;
         }
-
-        private void iesireToolStripMenuItem_Click(object sender, EventArgs e)
+        private void radioBoxFalse_CheckedChanged(object sender, EventArgs e)
         {
-            Application.Exit();
+            button3.Enabled = true;
+        }
+        private void checkBox1_CheckedChanged(object sender, EventArgs e)
+        {
+            button3.Enabled = true;
+        }
+        private void checkBox2_CheckedChanged(object sender, EventArgs e)
+        {
+            button3.Enabled = true;
+        }
+        private void checkBox3_CheckedChanged(object sender, EventArgs e)
+        {
+            button3.Enabled = true;
+        }
+        private void checkBox4_CheckedChanged(object sender, EventArgs e)
+        {
+            button3.Enabled = true;
+        }
+        private void radioBox1_CheckedChanged(object sender, EventArgs e)
+        {
+            button3.Enabled = true;
+        }
+        private void radioBox2_CheckedChanged(object sender, EventArgs e)
+        {
+            button3.Enabled = true;
+        }
+        private void radioBox3_CheckedChanged(object sender, EventArgs e)
+        {
+            button3.Enabled = true;
+        }
+        private void radioBox4_CheckedChanged(object sender, EventArgs e)
+        {
+            button3.Enabled = true;
         }
 
-        private void button5_Click(object sender, EventArgs e)
+        private void txtRaspuns_TextChanged(object sender, EventArgs e)
         {
-            printPreviewDialog1.Document = printDocument1;
-            printPreviewDialog1.ShowDialog();
+            if (txtRaspuns.Text.Length > 0)
+                button3.Enabled = true;
+            else
+                button3.Enabled = false;
         }
 
-        private void printDocument1_PrintPage(object sender, System.Drawing.Printing.PrintPageEventArgs e)
-        {
-            Bitmap bm = new Bitmap(this.dataGridView1.Width, this.dataGridView1.Height);
-            dataGridView1.DrawToBitmap(bm, new Rectangle(0, 0, this.dataGridView1.Width, this.dataGridView1.Height));
-            e.Graphics.DrawImage(bm, 100, 0);
-            e.Graphics.DrawString(label2.Text, new Font("Verdana", 22, FontStyle.Bold), Brushes.Black, new Point(120, 30));
-        }
-
-        private void tabControl1_Click(object sender, EventArgs e)
-        {
-           
-        }
     }
 }
